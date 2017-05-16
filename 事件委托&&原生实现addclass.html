@@ -45,6 +45,17 @@
         console.log(this);
         console.log(toggleClass(this,'list'));
     }
+
+    (function(){
+        ul.addEventListener('click',show);
+        function show(e){
+            e = e || window.event;
+            var src = e.target;
+            if(src && src.nodeName.toLowerCase() === 'li'){
+                alert(src.innerHTML);
+            }
+        }
+    })();
     function hasClass(obj, cls) {
         return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
     }
