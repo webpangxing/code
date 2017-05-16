@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        ul:after{
+            content:'';
+            display:block;
+            height:0;
+            clear:both;
+        }
+        li{
+            float:left;
+            margin-left:5px;
+            padding:5px 10px;
+            list-style:none;
+            color:green;
+            border:1px solid green;
+            text-align:center;
+        }
+        .list{background:limegreen;}
+    </style>
+</head>
+<body>
+<ul>
+    <li>111111</li>
+    <li>222222</li>
+    <li>333333</li>
+    <li>444444</li>
+    <li>555555</li>
+    <li>666666</li>
+</ul>
+<script>
+    var ul = document.getElementsByTagName('ul')[0];
+    var li = document.getElementsByTagName('li');
+    var li1 = document.createElement('li');
+    li1.innerHTML = '777777';
+    ul.appendChild(li1);
+        for(let i = 0,l = li.length; i < l; i++){
+            li[i].addEventListener('click',show);
+        }
+    function show(e){
+        e = e || window.event;
+        console.log(this);
+        console.log(toggleClass(this,'list'));
+    }
+    function hasClass(obj, cls) {
+        return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    }
+
+    function addClass(obj, cls) {
+        if (!this.hasClass(obj, cls)) obj.className += " " + cls;
+    }
+
+    function removeClass(obj, cls) {
+        if (hasClass(obj, cls)) {
+            var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+            obj.className = obj.className.replace(reg, ' ');
+        }
+    }
+
+    function toggleClass(obj,cls){
+        if(hasClass(obj,cls)){
+            removeClass(obj, cls);
+        }else{
+            addClass(obj, cls);
+        }
+    }
+</script>
+</body>
+</html>
