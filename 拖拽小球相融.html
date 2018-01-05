@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            position: relative;
+        }
+        .target {
+            filter: url("#goo");
+            width:1000px;
+            height:600px;
+            border: 1px solid red;
+        }
+        .ball {
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: absolute;
+            color:white;
+            text-align: center;
+            line-height: 150px;
+        }
+
+        #ball1{
+            top:100px;
+            left:200px;
+        }
+        #ball2{
+            top:100px;
+            left:300px;
+            background-image: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+    </style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute;">
+    <defs>
+        <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+        </filter>
+    </defs>
+</svg>
+
+<div class="target">
+    <i id="ball1" class="ball"></i>
+    <i id="ball2" class="ball">拖我呀</i>
+</div>
+<script>
+  var params = {
+      left: null,
+      top:0,
+      currentX: 0,
+      currentY: 0,
+      flag: false
+
+  };
+
+  var getCss = function(element,prop){
+      if(element.currentStyle){
+          return element.currentStyle[prop];
+      } else {
+          return document.defaultView.getComputedStyle(element,false)[prop];
+      }
+  };
+
+  var startDrag = function(a,b){
+      if(getCss(b,"left") !== "auto"){
+          params.left = getCss(b,"left");
+      }
+      if(getCss(b,"top") !== "auto"){
+          params.top = getCss(b,"top");
+      }
+      a.onmousedown = function(d){
+          params.flag = true;
+          if(!d){
+              d = window.event;
+              a.onselectstart = function(){
+                  return false;
+              }
+          }
+          var f = d;
+          params.currentX = f.clientX;
+          params.currentY = f.clientY;
+      };
+      document.onmouseup = function(){
+          params.flag = false;
+          params.left = getCss(b,"left");
+          params.top = getCss(b,"top");
+      };
+      document.onmousemove = function(i){
+          var j = i ? i : window.event;
+          if(params.flag){
+              var X = j.clientX;
+              var Y = j.clientY;
+
+              var endX = X - params.currentX;
+              var endY = Y - params.currentY;
+              b.style.left = parseInt(params.left) + endX + 'px';
+              b.style.top = parseInt(params.top) + endY + 'px';
+              if(i.preventDefault()){
+                  i.preventDefault();
+              }
+              return false;
+          }
+      }
+  };
+
+
+
+
+  var ball2 = document.getElementById('ball2');
+  startDrag(ball2,ball2);
+</script>
+</body>
+</html>
